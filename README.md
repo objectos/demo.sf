@@ -26,13 +26,21 @@ This section lists all the iterations of the application in reverse chronologica
 
 ### SFOW #001: Single-Path Text-Response Web Server 
 
-Configures and starts the web server.
+Configures and starts the web server:
+
+- Browse to `http://localhost:8080` and it responds with "It Works!".
+- Browse to any other path and it responds with "Not Found".
+
+Requires JDK 23 or later.
+Instructions to run:
 
 ```
 wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.2/objectos.way-0.2.2.jar
 wget -q https://raw.githubusercontent.com/objectos/demo.sfow/refs/tags/v001/main/Start.java
 java -p objectos.way-0.2.2.jar --add-modules objectos.way --enable-preview Start.java
 ```
+
+After the server starts, browse to `http://localhost:8080`.
 
 ## License
 
