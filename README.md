@@ -1,6 +1,6 @@
-# SFOW (Single-File Objectos Way)
+# Objectos Way In A Single File
 
-Source code for the "Single-File Objectos Way" series.
+Source code for the "Objectos Way In A Single File" series.
 
 ## How to Run
 
@@ -12,7 +12,7 @@ Then, in a work directory, run the following commands:
 
 ```
 wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.2/objectos.way-0.2.2.jar
-wget -q https://raw.githubusercontent.com/objectos/demo.sfow/refs/heads/main/main/Start.java
+wget -q https://raw.githubusercontent.com/objectos/demo.sf/refs/heads/main/main/Start.java
 java -p objectos.way-0.2.2.jar --add-modules objectos.way --enable-preview Start.java
 ```
 
@@ -36,7 +36,7 @@ Instructions to run:
 
 ```
 wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.2/objectos.way-0.2.2.jar
-wget -q https://raw.githubusercontent.com/objectos/demo.sfow/refs/tags/v001/main/Start.java
+wget -q https://raw.githubusercontent.com/objectos/demo.sf/refs/tags/v001/main/Start.java
 java -p objectos.way-0.2.2.jar --add-modules objectos.way --enable-preview Start.java
 ```
 

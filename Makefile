@@ -15,13 +15,13 @@
 #
 
 #
-# SFOW (Single-File Objectos Way)
+# OWIASF (Objectos Way In A Single File)
 #
 
 ## Coordinates
 GROUP_ID := br.com.objectos
-ARTIFACT_ID := demo.sfow
-VERSION := 001
+ARTIFACT_ID := demo.sf
+VERSION := 002-SNAPSHOT
 
 ## Maven interop
 CENTRAL := https://repo.maven.apache.org/maven2
