@@ -1,3 +1,4 @@
+
 /*
  * Copyright (C) 2025 Objectos Software LTDA.
  *
@@ -15,6 +16,9 @@
  */
 import module objectos.way;
 
+/**
+ * Bootstraps and starts the application.
+ */
 void main() throws java.io.IOException {
   var noteSink = App.NoteSink.OfConsole.create();
 
@@ -22,17 +26,7 @@ void main() throws java.io.IOException {
     opts.noteSink(noteSink);
   });
 
-  var handler = Http.Handler.create(routing -> {
-    routing.path("/", path -> {
-      path.allow(Http.Method.GET, http -> {
-        http.ok(Media.Bytes.textPlain("It Works!"));
-      });
-    });
-
-    routing.handler(http -> {
-      http.notFound(Media.Bytes.textPlain("Not Found"));
-    });
-  });
+  var handler = Http.Handler.create(this::routes);
 
   var server = Http.Server.create(opts -> {
     opts.handler(handler);
@@ -45,4 +39,37 @@ void main() throws java.io.IOException {
   shutdownHook.register(server);
 
   server.start();
+}
+
+static class Home extends Html.Template {
+  @Override
+  protected final void render() {
+    doctype();
+    html(
+        head(
+            title("Objectos Way In A Single File #002")
+        ),
+
+        body(
+            h1("This website is built entirely using Java"),
+
+            p("It's the Objectos Way!")
+        )
+    );
+  }
+}
+
+/**
+ * Registers the routes of the application
+ */
+private void routes(Http.Routing routing) {
+  routing.path("/", path -> {
+    path.allow(Http.Method.GET, http -> {
+      http.ok(new Home());
+    });
+  });
+
+  routing.handler(http -> {
+    http.notFound(Media.Bytes.textPlain("Not Found"));
+  });
 }
