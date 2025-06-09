@@ -15,9 +15,9 @@ To run the latest iteration of the application, you'll need:
 Then, in a work directory, run the following commands:
 
 ```
-wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.2/objectos.way-0.2.2.jar
+wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.3/objectos.way-0.2.3.jar
 wget -q https://raw.githubusercontent.com/objectos/demo.sf/refs/heads/main/main/Start.java
-java -p objectos.way-0.2.2.jar --add-modules objectos.way --enable-preview Start.java
+java -p objectos.way-0.2.3.jar --add-modules objectos.way --enable-preview Start.java
 ```
 
 Finally, browse to `http://localhost:8080`.
@@ -27,6 +27,30 @@ Alternatively, you can run a previous iteration of the application by following 
 ## Iterations
 
 This section lists all the iterations of the application in reverse chronological order.
+
+### OWIASF #003: HTML template variables, conditional rendering and loops.
+
+We add the `/objectos/html` route which showcases a number of Objectos HTML features:
+
+- HTML template variables.
+- Conditional rendering.
+- Loops: using the `f` instruction.
+
+Requires JDK 23 or later.
+Instructions to run:
+
+```
+wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.3/objectos.way-0.2.3.jar
+wget -q https://raw.githubusercontent.com/objectos/demo.sf/refs/tags/v003/main/Start.java
+java -p objectos.way-0.2.3.jar --add-modules objectos.way --enable-preview Start.java
+```
+
+After the server starts:
+
+- Browse to `http://localhost:8080/objectos/html` and see the default `400 Bad Request` response.
+- Browse to `http://localhost:8080/objectos/html?name=Objectos+Way` and see the template variable in action. 
+- Browse to `http://localhost:8080/objectos/html?name=Objectos+Way&show=on` and see the conditional rendering in action.
+- Browse to `http://localhost:8080/objectos/html?name=Objectos+Way&show=on&count=3` and see the loops / iteration in action.
 
 ### OWIASF #002: HTML response using the `Html.Template` class 
 
