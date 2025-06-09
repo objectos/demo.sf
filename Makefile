@@ -27,7 +27,7 @@ VERSION := 003-SNAPSHOT
 CENTRAL := https://repo.maven.apache.org/maven2
 
 ## Objectos Way Version
-WAY_VERSION := 0.2.2
+WAY_VERSION := 0.2.3
 
 # Delete the default suffixes
 .SUFFIXES:

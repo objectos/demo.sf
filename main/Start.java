@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2025 Objectos Software LTDA.
  *
@@ -14,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import module objectos.way;
 
 /**
@@ -41,7 +41,111 @@ void main() throws java.io.IOException {
   server.start();
 }
 
-static class Home extends Html.Template {
+/**
+ * Registers the routes of the application
+ */
+private void routes(Http.Routing routing) {
+  routing.path("/", path -> {
+    path.allow(Http.Method.GET, this::home);
+  });
+
+  routing.path("/objectos/html", path -> {
+    path.allow(Http.Method.GET, this::objectosHtml);
+  });
+
+  routing.handler(http -> {
+    http.notFound(Media.Bytes.textPlain("Not Found"));
+  });
+}
+
+/**
+ * Renders the Objectos HTML demo of our application.
+ */
+static final class ObjectosHtml extends Html.Template {
+  private final String name;
+
+  private final boolean show;
+
+  private final int count;
+
+  ObjectosHtml(String name, boolean show, int count) {
+    this.name = name;
+
+    this.show = show;
+
+    this.count = count;
+  }
+
+  @Override
+  protected final void render() {
+    doctype();
+    html(
+        head(
+            title("Objectos Way In A Single File #003")
+        ),
+
+        body(
+            h1("This page showcases the Objectos HTML features"),
+
+            p("It's the Objectos Way!"),
+
+            h2("Template variables"),
+
+            p(text("Hello, "), strong(name)),
+
+            h2("Conditional rendering"),
+
+            show ? p("I'm shown!!!") : noop(),
+
+            h2("Loops / iteration"),
+
+            ul(
+                f(this::renderItems)
+            )
+        )
+    );
+  }
+
+  private void renderItems() {
+    for (int i = 0; i < count; i++) {
+      li("Objectos HTML Is Cool!");
+    }
+  }
+}
+
+/**
+ * The Objectos HTML "controller".
+ */
+private void objectosHtml(Http.Exchange http) {
+  String name = http.queryParam("name");
+
+  if (name == null) {
+    Media message = Media.Bytes.textPlain("Please specify a name query parameter");
+
+    http.badRequest(message);
+
+    return;
+  }
+
+  String showParam = http.queryParam("show");
+
+  boolean show = "on".equals(showParam);
+
+  int count = http.queryParamAsInt("count", 1);
+
+  if (count < 0) {
+    count = 1;
+  }
+
+  ObjectosHtml view = new ObjectosHtml(name, show, count);
+
+  http.ok(view);
+}
+
+/**
+ * Renders the home page of our application.
+ */
+static final class Home extends Html.Template {
   @Override
   protected final void render() {
     doctype();
@@ -60,16 +164,10 @@ static class Home extends Html.Template {
 }
 
 /**
- * Registers the routes of the application
+ * The home page "controller".
  */
-private void routes(Http.Routing routing) {
-  routing.path("/", path -> {
-    path.allow(Http.Method.GET, http -> {
-      http.ok(new Home());
-    });
-  });
+private void home(Http.Exchange http) {
+  Home view = new Home();
 
-  routing.handler(http -> {
-    http.notFound(Media.Bytes.textPlain("Not Found"));
-  });
+  http.ok(view);
 }
