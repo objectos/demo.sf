@@ -1,2 +1,7 @@
-/eclipse-bin/
 /work/
+
+# Eclipse IDE
+/eclipse-bin/
+/.settings/
+/.classpath
+/.project
