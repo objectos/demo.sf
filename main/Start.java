@@ -20,15 +20,30 @@ import module objectos.way;
  * Bootstraps and starts the application.
  */
 void main() throws java.io.IOException {
-  var noteSink = App.NoteSink.OfConsole.create();
+  // A note sink works as a logger for this particular application
+  // Objectos Way provides implementations in the App namespace.
+  final Note.Sink noteSink;
+  noteSink = App.NoteSink.OfConsole.create();
 
-  var shutdownHook = App.ShutdownHook.create(opts -> {
+  // Convenience for registering tasks to be executed
+  // in the JVM shutdown sequence.
+  // We'll typically register AutoCloseable instances
+  final App.ShutdownHook shutdownHook;
+  shutdownHook = App.ShutdownHook.create(opts -> {
     opts.noteSink(noteSink);
   });
 
-  var handler = Http.Handler.create(this::routes);
+  // All HTTP requests will be handled by this object.
+  // Therefore, handlers themselves MUST BE stateless.
+  // State, e.g. web session, must be stored elsewhere (Http.SessionStore).
+  final Http.Handler handler;
+  handler = Http.Handler.create(this::routes);
 
-  var server = Http.Server.create(opts -> {
+  // The Objectos Way HTTP/1.1 server instance.
+  // Binds to the loopback address,
+  // and uses one virtual thread per connection.
+  final Http.Server server;
+  server = Http.Server.create(opts -> {
     opts.handler(handler);
 
     opts.noteSink(noteSink);
@@ -36,8 +51,10 @@ void main() throws java.io.IOException {
     opts.port(8080);
   });
 
+  // Closes (stops) the HTTP server during the JVM shutdown sequence.
   shutdownHook.register(server);
 
+  // Starts the HTTP server
   server.start();
 }
 
@@ -53,15 +70,48 @@ private void routes(Http.Routing routing) {
     path.allow(Http.Method.GET, this::objectosHtml);
   });
 
+  // if the request does not match any of the previous routes,
+  // it will be handled here
   routing.handler(http -> {
     http.notFound(Media.Bytes.textPlain("Not Found"));
   });
 }
 
 /**
+ * Renders the home page of our application.
+ */
+private static final class Home extends Html.Template {
+  @Override
+  protected final void render() {
+    doctype();
+    html(
+        head(
+            title("Objectos Way In A Single File #002")
+        ),
+
+        body(
+            h1("This website is built entirely using Java"),
+
+            p("It's the Objectos Way!")
+        )
+    );
+  }
+}
+
+/**
+ * The home page "controller".
+ */
+private void home(Http.Exchange http) {
+  final Home view;
+  view = new Home();
+
+  http.ok(view);
+}
+
+/**
  * Renders the Objectos HTML demo of our application.
  */
-static final class ObjectosHtml extends Html.Template {
+private static final class ObjectosHtml extends Html.Template {
   private final String name;
 
   private final boolean show;
@@ -117,57 +167,36 @@ static final class ObjectosHtml extends Html.Template {
  * The Objectos HTML "controller".
  */
 private void objectosHtml(Http.Exchange http) {
-  String name = http.queryParam("name");
+  // The template variables 'variable'
+  final String name;
+  name = http.queryParam("name");
 
   if (name == null) {
-    Media message = Media.Bytes.textPlain("Please specify a name query parameter");
+    final Media message;
+    message = Media.Bytes.textPlain("Please specify a name query parameter");
 
     http.badRequest(message);
 
     return;
   }
 
-  String showParam = http.queryParam("show");
+  // The conditional rendering variable
+  final String showParam;
+  showParam = http.queryParam("show");
 
-  boolean show = "on".equals(showParam);
+  final boolean show;
+  show = "on".equals(showParam);
 
-  int count = http.queryParamAsInt("count", 1);
+  // The loops/iteration variable
+  int count;
+  count = http.queryParamAsInt("count", 1);
 
   if (count < 0) {
     count = 1;
   }
 
-  ObjectosHtml view = new ObjectosHtml(name, show, count);
-
-  http.ok(view);
-}
-
-/**
- * Renders the home page of our application.
- */
-static final class Home extends Html.Template {
-  @Override
-  protected final void render() {
-    doctype();
-    html(
-        head(
-            title("Objectos Way In A Single File #002")
-        ),
-
-        body(
-            h1("This website is built entirely using Java"),
-
-            p("It's the Objectos Way!")
-        )
-    );
-  }
-}
-
-/**
- * The home page "controller".
- */
-private void home(Http.Exchange http) {
-  Home view = new Home();
+  final ObjectosHtml view;
+  view = new ObjectosHtml(name, show, count);
 
   http.ok(view);
 }
