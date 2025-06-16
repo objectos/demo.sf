@@ -52,7 +52,7 @@ After the server starts:
 
 - Browse to `http://localhost:8080` and see the styles applied.
 - Using your browser devtools, switch between light and dark mode and observe the changes. 
-- Browse to `http://localhost:8080/style.css` and see the generated CSS.
+- Browse to `http://localhost:8080/styles.css` and see the generated CSS.
 
 ### OWIASF #003: HTML template variables, conditional rendering and loops.
 

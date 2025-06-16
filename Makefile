@@ -21,7 +21,7 @@
 ## Coordinates
 GROUP_ID := br.com.objectos
 ARTIFACT_ID := demo.sf
-VERSION := 004
+VERSION := 005-SNAPSHOT
 
 ## Maven interop
 CENTRAL := https://repo.maven.apache.org/maven2
