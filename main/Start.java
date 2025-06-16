@@ -16,13 +16,14 @@
 
 import module objectos.way;
 
+private Note.Sink noteSink;
+
 /**
  * Bootstraps and starts the application.
  */
 void main() throws java.io.IOException {
   // A note sink works as a logger for this particular application
   // Objectos Way provides implementations in the App namespace.
-  final Note.Sink noteSink;
   noteSink = App.NoteSink.OfConsole.create();
 
   // Convenience for registering tasks to be executed
@@ -70,11 +71,35 @@ private void routes(Http.Routing routing) {
     path.allow(Http.Method.GET, this::objectosHtml);
   });
 
+  routing.path("/styles.css", path -> {
+    path.allow(Http.Method.GET, this::styles);
+  });
+
   // if the request does not match any of the previous routes,
   // it will be handled here
   routing.handler(http -> {
     http.notFound(Media.Bytes.textPlain("Not Found"));
   });
+}
+
+private void styles(Http.Exchange http) {
+  Css.StyleSheet styles = Css.StyleSheet.create(opts -> {
+    opts.noteSink(noteSink);
+
+    opts.scanClass(Home.class);
+
+    opts.theme("""
+    --color-bg: var(--color-gray-100);
+    --color-fg: var(--color-gray-900);
+    """);
+
+    opts.theme("@media (prefers-color-scheme: dark)", """
+    --color-bg: var(--color-gray-900);
+    --color-fg: var(--color-gray-100);
+    """);
+  });
+
+  http.ok(styles);
 }
 
 /**
@@ -85,14 +110,29 @@ private static final class Home extends Html.Template {
   protected final void render() {
     doctype();
     html(
+        css("""
+        background-color:bg
+        color:fg
+        """),
+
         head(
+            link(rel("stylesheet"), type("text/css"), href("/styles.css")),
             title("Objectos Way In A Single File #002")
         ),
 
         body(
-            h1("This website is built entirely using Java"),
+            css("""
+            display:flex
+            align-items:center
+            justify-content:center
+            min-height:100dvh
+            """),
 
-            p("It's the Objectos Way!")
+            main(
+                h1("This website is built entirely using Java"),
+
+                p("It's the Objectos Way!")
+            )
         )
     );
   }
