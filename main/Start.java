@@ -16,14 +16,13 @@
 
 import module objectos.way;
 
-private Note.Sink noteSink;
-
 /**
  * Bootstraps and starts the application.
  */
 void main() throws java.io.IOException {
   // A note sink works as a logger for this particular application
   // Objectos Way provides implementations in the App namespace.
+  final Note.Sink noteSink;
   noteSink = App.NoteSink.OfConsole.create();
 
   // Convenience for registering tasks to be executed
@@ -84,6 +83,13 @@ private void routes(Http.Routing routing) {
 
 private void styles(Http.Exchange http) {
   Css.StyleSheet styles = Css.StyleSheet.create(opts -> {
+    // We should reuse the note sink created during bootstrap.
+    // But, that'd require (ideally) the App.Injector class from Objectos Way,
+    // which we'll only introduce during a later iteration.
+    // So, for now, we just create a new instance here.
+    final Note.Sink noteSink;
+    noteSink = App.NoteSink.OfConsole.create();
+
     opts.noteSink(noteSink);
 
     opts.scanClass(Home.class);
