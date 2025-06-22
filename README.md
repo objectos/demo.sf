@@ -57,6 +57,8 @@ After the server starts:
 
 ### OWIASF #003: HTML template variables, conditional rendering and loops.
 
+[YouTube Video](https://www.youtube.com/watch?v=7dD9RI-Vr_M)
+
 We add the `/objectos/html` route which showcases a number of Objectos HTML features:
 
 - HTML template variables.
