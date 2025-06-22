@@ -81,33 +81,6 @@ private void routes(Http.Routing routing) {
   });
 }
 
-private void styles(Http.Exchange http) {
-  Css.StyleSheet styles = Css.StyleSheet.create(opts -> {
-    // We should reuse the note sink created during bootstrap.
-    // But, that'd require (ideally) the App.Injector class from Objectos Way,
-    // which we'll only introduce during a later iteration.
-    // So, for now, we just create a new instance here.
-    final Note.Sink noteSink;
-    noteSink = App.NoteSink.OfConsole.create();
-
-    opts.noteSink(noteSink);
-
-    opts.scanClass(Home.class);
-
-    opts.theme("""
-    --color-bg: var(--color-gray-100);
-    --color-fg: var(--color-gray-900);
-    """);
-
-    opts.theme("@media (prefers-color-scheme: dark)", """
-    --color-bg: var(--color-gray-900);
-    --color-fg: var(--color-gray-100);
-    """);
-  });
-
-  http.ok(styles);
-}
-
 /**
  * Renders the home page of our application.
  */
@@ -146,6 +119,15 @@ private static final class Home extends Html.Template {
 
 /**
  * The home page "controller".
+ *
+ * <p>
+ * We're using the term "controller" in quotes because Objectos Way itself does
+ * not introduce the concept of a "controller", nor does it impose the concept
+ * to developers. Case in point, this is a regular method which is used as a
+ * method reference in the route declaration. On the other hand, the term (and
+ * the concept of a) "controller" is widely used in web development, and we
+ * chose to use it here; as this single-file application is intended to be an
+ * introduction to the Objectos Way library.
  */
 private void home(Http.Exchange http) {
   final Home view;
@@ -245,4 +227,35 @@ private void objectosHtml(Http.Exchange http) {
   view = new ObjectosHtml(name, show, count);
 
   http.ok(view);
+}
+
+/**
+ * The {@code styles.css} "controller".
+ */
+private void styles(Http.Exchange http) {
+  final Css.StyleSheet styles;
+  styles = Css.StyleSheet.create(opts -> {
+    // We should reuse the note sink created during bootstrap.
+    // But, that'd require (ideally) the App.Injector class from Objectos Way,
+    // which we'll only introduce during a later iteration.
+    // So, for now, we just create a new instance here.
+    final Note.Sink noteSink;
+    noteSink = App.NoteSink.OfConsole.create();
+
+    opts.noteSink(noteSink);
+
+    opts.scanClass(Home.class);
+
+    opts.theme("""
+    --color-bg: var(--color-gray-100);
+    --color-fg: var(--color-gray-900);
+    """);
+
+    opts.theme("@media (prefers-color-scheme: dark)", """
+    --color-bg: var(--color-gray-900);
+    --color-fg: var(--color-gray-100);
+    """);
+  });
+
+  http.ok(styles);
 }
