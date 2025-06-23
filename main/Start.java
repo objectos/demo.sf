@@ -70,6 +70,14 @@ private void routes(Http.Routing routing) {
     path.allow(Http.Method.GET, this::objectosHtml);
   });
 
+  routing.path("/objectos/script", path -> {
+    path.allow(Http.Method.GET, this::objectosScript);
+  });
+
+  routing.path("/script.js", path -> {
+    path.allow(Http.Method.GET, http -> http.ok(Script.Library.of()));
+  });
+
   routing.path("/styles.css", path -> {
     path.allow(Http.Method.GET, this::styles);
   });
@@ -96,7 +104,8 @@ private static final class Home extends Html.Template {
 
         head(
             link(rel("stylesheet"), type("text/css"), href("/styles.css")),
-            title("Objectos Way In A Single File #002")
+            script(src("/script.js")),
+            title("Objectos Way In A Single File #005")
         ),
 
         body(
@@ -108,9 +117,23 @@ private static final class Home extends Html.Template {
             """),
 
             main(
+                dataFrame("main", "home"),
+
                 h1("This website is built entirely using Java"),
 
-                p("It's the Objectos Way!")
+                p("It's the Objectos Way!"),
+
+                h2("Pages"),
+
+                ul(
+                    li(
+                        a(
+                            dataOnClick(Script::navigate),
+                            href("/objectos/script"),
+                            text("Objectos Script")
+                        )
+                    )
+                )
             )
         )
     );
@@ -159,26 +182,37 @@ private static final class ObjectosHtml extends Html.Template {
     doctype();
     html(
         head(
+            script(src("/script.js")),
             title("Objectos Way In A Single File #003")
         ),
 
         body(
-            h1("This page showcases the Objectos HTML features"),
+            main(
+                dataFrame("main", "html"),
 
-            p("It's the Objectos Way!"),
+                a(
+                    dataOnClick(Script::navigate),
+                    href("/"),
+                    text("Back")
+                ),
 
-            h2("Template variables"),
+                h1("This page showcases the Objectos HTML features"),
 
-            p(text("Hello, "), strong(name)),
+                p("It's the Objectos Way!"),
 
-            h2("Conditional rendering"),
+                h2("Template variables"),
 
-            show ? p("I'm shown!!!") : noop(),
+                p(text("Hello, "), strong(name)),
 
-            h2("Loops / iteration"),
+                h2("Conditional rendering"),
 
-            ul(
-                f(this::renderItems)
+                show ? p("I'm shown!!!") : noop(),
+
+                h2("Loops / iteration"),
+
+                ul(
+                    f(this::renderItems)
+                )
             )
         )
     );
@@ -225,6 +259,61 @@ private void objectosHtml(Http.Exchange http) {
 
   final ObjectosHtml view;
   view = new ObjectosHtml(name, show, count);
+
+  http.ok(view);
+}
+
+/**
+ * Renders the Objectos Script demo of our application.
+ */
+private static final class ObjectosScript extends Html.Template {
+  @Override
+  protected final void render() {
+    doctype();
+    html(
+        css("""
+        background-color:bg
+        color:fg
+        """),
+
+        head(
+            link(rel("stylesheet"), type("text/css"), href("/styles.css")),
+            script(src("/script.js")),
+            title("Objectos Script")
+        ),
+
+        body(
+            css("""
+            display:flex
+            align-items:center
+            justify-content:center
+            min-height:100dvh
+            """),
+
+            main(
+                dataFrame("main", "script"),
+
+                a(
+                    dataOnClick(Script::navigate),
+                    href("/"),
+                    text("Back")
+                ),
+
+                h1("This page showcases Objectos Script"),
+
+                p("Codes like a server-side rendered app, works like a SPA")
+            )
+        )
+    );
+  }
+}
+
+/**
+ * The Objectos Script "controller".
+ */
+private void objectosScript(Http.Exchange http) {
+  final ObjectosScript view;
+  view = new ObjectosScript();
 
   http.ok(view);
 }

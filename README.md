@@ -28,6 +28,32 @@ Alternatively, you can run a previous iteration of the application by following 
 
 This section lists all the iterations of the application in reverse chronological order.
 
+### OWIASF #005: Soft navigation between pages with Objectos Script
+
+Release date: 2025-06-23
+
+We link between pages of our application using the soft navigation feature of Objectos Script:
+
+- Including the JS library directly from Java code.
+- Creating an Objectos Script powered link using the `data-on-click` attribute.
+- Defining `data-frame` attributes.   
+
+Requires JDK 23 or later.
+Instructions to run:
+
+```
+wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.4/objectos.way-0.2.4.jar
+wget -q https://raw.githubusercontent.com/objectos/demo.sf/refs/tags/v005/main/Start.java
+java -p objectos.way-0.2.4.jar --add-modules objectos.way --enable-preview Start.java
+```
+
+After the server starts:
+
+- Browse to `http://localhost:8080` and click on the "Objectos Script" link.
+- Observe the changes in the page title, the browser URL and the page contents. 
+- Browse to `http://localhost:8080/script.js` and see code of the included JS library.
+- Use the devtools of your browser, and see that navigations are initiated by the JS library. 
+
 ### OWIASF #004: Styling our application with Objectos CSS
 
 Release date: 2025-06-16
