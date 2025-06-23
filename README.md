@@ -15,9 +15,9 @@ To run the latest iteration of the application, you'll need:
 Then, in a work directory, run the following commands:
 
 ```
-wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.3/objectos.way-0.2.3.jar
+wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.4/objectos.way-0.2.4.jar
 wget -q https://raw.githubusercontent.com/objectos/demo.sf/refs/heads/main/main/Start.java
-java -p objectos.way-0.2.3.jar --add-modules objectos.way --enable-preview Start.java
+java -p objectos.way-0.2.4.jar --add-modules objectos.way --enable-preview Start.java
 ```
 
 Finally, browse to `http://localhost:8080`.
