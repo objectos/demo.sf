@@ -37,7 +37,7 @@ void main() throws java.io.IOException {
   // Therefore, handlers themselves MUST BE stateless.
   // State, e.g. web session, must be stored elsewhere (Http.SessionStore).
   final Http.Handler handler;
-  handler = Http.Handler.create(this::routes);
+  handler = Http.Handler.of(this::routes);
 
   // The Objectos Way HTTP/1.1 server instance.
   // Binds to the loopback address,
