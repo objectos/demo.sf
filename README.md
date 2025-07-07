@@ -15,9 +15,9 @@ To run the latest iteration of the application, you'll need:
 Then, in a work directory, run the following commands:
 
 ```
-wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.4/objectos.way-0.2.4.jar
+wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.5/objectos.way-0.2.5.jar
 wget -q https://raw.githubusercontent.com/objectos/demo.sf/refs/heads/main/main/Start.java
-java -p objectos.way-0.2.4.jar --add-modules objectos.way --enable-preview Start.java
+java -p objectos.way-0.2.5.jar --add-modules objectos.way --enable-preview Start.java
 ```
 
 Finally, browse to `http://localhost:8080`.
@@ -28,9 +28,34 @@ Alternatively, you can run a previous iteration of the application by following 
 
 This section lists all the iterations of the application in reverse chronological order.
 
+### OWIASF #006: Objectos HTML template inheritance
+
+Release date: 2025-07-07
+
+In order to remove some of the code duplication observed in the page classes,
+we introduce a base template to our application. 
+
+In an Objectos Way application, HTML templates are regular Java classes.
+So template inheritance is just regular Java class inheritance.
+In this iteration, we showcase:
+
+- Creating a base template as an abstract Java class.
+- Using an abstract method directly to provide the page title.
+- Using the `f` instruction along with an abstract method.
+
+Requires JDK 23 or later.
+Instructions to run:
+
+```
+wget -q https://repo.maven.apache.org/maven2/br/com/objectos/objectos.way/0.2.5/objectos.way-0.2.5.jar
+wget -q https://raw.githubusercontent.com/objectos/demo.sf/refs/tags/v006/main/Start.java
+java -p objectos.way-0.2.5.jar --add-modules objectos.way --enable-preview Start.java
+```
+
 ### OWIASF #005: Soft navigation between pages with Objectos Script
 
 Release date: 2025-06-23
+[YouTube Video](https://www.youtube.com/watch?v=J5tcNEQ6HYE)
 
 We link between pages of our application using the soft navigation feature of Objectos Script:
 

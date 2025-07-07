@@ -21,13 +21,13 @@
 ## Coordinates
 GROUP_ID := br.com.objectos
 ARTIFACT_ID := demo.sf
-VERSION := 005
+VERSION := 006
 
 ## Maven interop
 CENTRAL := https://repo.maven.apache.org/maven2
 
 ## Objectos Way Version
-WAY_VERSION := 0.2.4
+WAY_VERSION := 0.2.5
 
 # Delete the default suffixes
 .SUFFIXES:

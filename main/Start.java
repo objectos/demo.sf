@@ -90,9 +90,9 @@ private void routes(Http.Routing routing) {
 }
 
 /**
- * Renders the home page of our application.
+ * The base template of our application.
  */
-private static final class Home extends Html.Template {
+private static abstract class Page extends Html.Template {
   @Override
   protected final void render() {
     doctype();
@@ -105,7 +105,7 @@ private static final class Home extends Html.Template {
         head(
             link(rel("stylesheet"), type("text/css"), href("/styles.css")),
             script(src("/script.js")),
-            title("Objectos Way In A Single File #005")
+            title(pageTitle())
         ),
 
         body(
@@ -116,23 +116,50 @@ private static final class Home extends Html.Template {
             min-height:100dvh
             """),
 
-            main(
-                dataFrame("main", "home"),
+            f(this::renderBody)
+        )
+    );
+  }
 
-                h1("This website is built entirely using Java"),
+  abstract String pageTitle();
 
-                p("It's the Objectos Way!"),
+  abstract void renderBody();
+}
 
-                h2("Pages"),
+/**
+ * Renders the home page of our application.
+ */
+private static final class Home extends Page {
+  @Override
+  final String pageTitle() {
+    return "Objectos Way In A Single File #006";
+  }
 
-                ul(
-                    li(
-                        a(
-                            dataOnClick(Script::navigate),
-                            href("/objectos/script"),
-                            text("Objectos Script")
-                        )
-                    )
+  @Override
+  final void renderBody() {
+    main(
+        dataFrame("main", "home"),
+
+        h1("This website is built entirely using Java"),
+
+        p("It's the Objectos Way!"),
+
+        h2("Pages"),
+
+        ul(
+            li(
+                a(
+                    dataOnClick(Script::navigate),
+                    href("/objectos/html?name=Objectos+Way"),
+                    text("Objectos HTML")
+                )
+            ),
+
+            li(
+                a(
+                    dataOnClick(Script::navigate),
+                    href("/objectos/script"),
+                    text("Objectos Script")
                 )
             )
         )
@@ -162,7 +189,7 @@ private void home(Http.Exchange http) {
 /**
  * Renders the Objectos HTML demo of our application.
  */
-private static final class ObjectosHtml extends Html.Template {
+private static final class ObjectosHtml extends Page {
   private final String name;
 
   private final boolean show;
@@ -178,42 +205,37 @@ private static final class ObjectosHtml extends Html.Template {
   }
 
   @Override
-  protected final void render() {
-    doctype();
-    html(
-        head(
-            script(src("/script.js")),
-            title("Objectos Way In A Single File #003")
+  final String pageTitle() {
+    return "Objectos Way In A Single File #006";
+  }
+
+  @Override
+  final void renderBody() {
+    main(
+        dataFrame("main", "html"),
+
+        a(
+            dataOnClick(Script::navigate),
+            href("/"),
+            text("Back")
         ),
 
-        body(
-            main(
-                dataFrame("main", "html"),
+        h1("This page showcases the Objectos HTML features"),
 
-                a(
-                    dataOnClick(Script::navigate),
-                    href("/"),
-                    text("Back")
-                ),
+        p("It's the Objectos Way!"),
 
-                h1("This page showcases the Objectos HTML features"),
+        h2("Template variables"),
 
-                p("It's the Objectos Way!"),
+        p(text("Hello, "), strong(name)),
 
-                h2("Template variables"),
+        h2("Conditional rendering"),
 
-                p(text("Hello, "), strong(name)),
+        show ? p("I'm shown!!!") : noop(),
 
-                h2("Conditional rendering"),
+        h2("Loops / iteration"),
 
-                show ? p("I'm shown!!!") : noop(),
-
-                h2("Loops / iteration"),
-
-                ul(
-                    f(this::renderItems)
-                )
-            )
+        ul(
+            f(this::renderItems)
         )
     );
   }
@@ -266,44 +288,26 @@ private void objectosHtml(Http.Exchange http) {
 /**
  * Renders the Objectos Script demo of our application.
  */
-private static final class ObjectosScript extends Html.Template {
+private static final class ObjectosScript extends Page {
   @Override
-  protected final void render() {
-    doctype();
-    html(
-        css("""
-        background-color:bg
-        color:fg
-        """),
+  final String pageTitle() {
+    return "Objectos Script";
+  }
 
-        head(
-            link(rel("stylesheet"), type("text/css"), href("/styles.css")),
-            script(src("/script.js")),
-            title("Objectos Script")
+  @Override
+  final void renderBody() {
+    main(
+        dataFrame("main", "script"),
+
+        a(
+            dataOnClick(Script::navigate),
+            href("/"),
+            text("Back")
         ),
 
-        body(
-            css("""
-            display:flex
-            align-items:center
-            justify-content:center
-            min-height:100dvh
-            """),
+        h1("This page showcases Objectos Script"),
 
-            main(
-                dataFrame("main", "script"),
-
-                a(
-                    dataOnClick(Script::navigate),
-                    href("/"),
-                    text("Back")
-                ),
-
-                h1("This page showcases Objectos Script"),
-
-                p("Codes like a server-side rendered app, works like a SPA")
-            )
-        )
+        p("Codes like a server-side rendered app, works like a SPA")
     );
   }
 }
@@ -333,7 +337,7 @@ private void styles(Http.Exchange http) {
 
     opts.noteSink(noteSink);
 
-    opts.scanClass(Home.class);
+    opts.scanClass(Page.class);
 
     opts.theme("""
     --color-bg: var(--color-gray-100);
